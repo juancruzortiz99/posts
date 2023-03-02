@@ -3,10 +3,18 @@
 @section('title', 'Admin Post')
 
 @section('content_header')
+
+    <a href="{{ route('admin.tags.create') }}" class="btn btn-success btn-sm float-right">Nueva etiqueta</a>
+
     <h1>Mostrar listado de Etiqueta</h1>
 @stop
 
 @section('content')
+    @if (session('info'))
+        <div class="alert alert-success">
+            <strong>{{ session('info') }}</strong>
+        </div>
+    @endif
     <div class="card">
         <div class="card-body">
             <table class="table table-stripped">
@@ -20,13 +28,13 @@
                 <tbody>
                     @foreach ($tags as $tag)
                         <tr>
-                            <td>{{$tag->id}}</td>
-                            <td>{{$tag->name}}</td>
+                            <td>{{ $tag->id }}</td>
+                            <td>{{ $tag->name }}</td>
                             <td width="10px">
-                                <a class="btn btn-primary btn-sm" href="{{route('admin.tags.edit', $tag)}}">Editar</a>
+                                <a class="btn btn-primary btn-sm" href="{{ route('admin.tags.edit', $tag) }}">Editar</a>
                             </td>
                             <td width="10px">
-                                <form action="{{route('admin.tags.destroy', $tag)}}" method="POST">
+                                <form action="{{ route('admin.tags.destroy', $tag) }}" method="POST">
                                     @csrf
                                     @method('delete')
 

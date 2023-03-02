@@ -18,9 +18,9 @@ return new class extends Migration
             
             $table->string('slug');
             
-            $table->text('extract');
+            $table->text('extract')->nullable();
             
-            $table->longText('body');
+            $table->longText('body')->nullable();
             
             $table->enum('status', [1,2])->default(1);
 
