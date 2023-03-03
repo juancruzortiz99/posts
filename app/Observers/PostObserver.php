@@ -11,9 +11,9 @@ class PostObserver
     public function creating(Post $post): void
     {
         //Solo sirve para los seeders
-       /**  if (!\App::runningInConsole()) {
+        if (!\App::runningInConsole()) {
             $post->user_id = auth()->user()->id;
-        }*/
+        }
     }
 
 

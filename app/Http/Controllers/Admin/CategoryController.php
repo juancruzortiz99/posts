@@ -8,74 +8,70 @@ use App\Models\Category;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
+    public function __construct()
+    {
+        //En el se le asignaran los permisos que tiene cada usuario.
+
+        $this->middleware('can:admin.categories.index')->only('index');
+        $this->middleware('can:admin.categories.edit')->only('edit', 'update');
+        $this->middleware('can:admin.categories.create')->only('create', 'store');
+        $this->middleware('can:admin.categories.destroy')->only('destroy');
+    }
+
+
     public function index()
     {
+        // Llamo a la tabla category y obtengo todos sus elemntos y atributos
         $categories = Category::all();
 
         return view('admin.categories.index', compact('categories'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create()
     {
-        return view('admin.categories.create');      
+        return view('admin.categories.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
+
+        // Valido para que el nombre sea obligatorio y el slug no exista en la BD
         $request->validate([
             'name' => 'required',
             'slug' => 'required|unique:categories'
         ]);
 
+        // Creo una categoria si es valida con todos los elementos enviados por request
         $category = Category::create($request->all());
 
         return redirect()->route('admin.categories.edit', $category)->with('info', 'La categoria se creó con éxito.');
-
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Category $category)
-    {
-        return view('admin.categories.show', compact('category'));     
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Category $category)
     {
         return view('admin.categories.edit', compact('category'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(Request $request, Category $category)
     {
+        // Valido que haya un nombre y que el slug no exista salvo que sea el mismo q editamos
         $request->validate([
             'name' => 'required',
             'slug' => "required|unique:categories,slug,$category->id"
         ]);
 
+        // Actualizo todos los datos
         $category->update($request->all());
-        
+
         return redirect()->route('admin.categories.edit', $category)->with('info', 'La categoria se actualizó con éxito.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(Category $category)
     {
         $category->delete();

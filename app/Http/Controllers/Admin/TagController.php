@@ -8,20 +8,29 @@ use App\Models\Tags;
 
 class TagController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+        //En el se le asignaran los permisos que tiene cada usuario.
+
+        $this->middleware('can:admin.tags.index')->only('index');
+        $this->middleware('can:admin.tags.edit')->only('edit', 'update');
+        $this->middleware('can:admin.tags.create')->only('create', 'store');
+        $this->middleware('can:admin.tags.destroy')->only('destroy');
+    }
+
+
     public function index()
     {
+        // Recogo todos los tags
         $tags = Tags::all();
         return view('admin.tags.index', compact('tags'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create()
     {
+        // Asigno un array donde estaran los diferentes colores en
+        // en un select
         $colors = [
             'red' => 'Color rojo',
             'yellow' => 'Color amarillo',
@@ -37,34 +46,24 @@ class TagController extends Controller
 
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    
     public function store(Request $request)
     {
+        // Antes de crear valido, que haya un nombre, que exista una etiqueta
+        // y que sea unica. Y que tenga color
         $request->validate([
             'name' => 'required',
             'slug' => 'required|unique:tags',
             'color' => 'required' 
         ]);
 
+        
         $tag = Tags::create($request->all());
     
         return redirect()->route('admin.tags.edit', compact('tag'))->with('info', 'La etiqueta se creó con éxito');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Tags $tag)
-    {
-        return view('admin.tags.show', compact('tag'));
-
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
+    
     public function edit(Tags $tag)
     {
         $colors = [
@@ -81,9 +80,7 @@ class TagController extends Controller
         
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+   
     public function update(Request $request, Tags $tag)
     {
         $request->validate([
@@ -97,9 +94,7 @@ class TagController extends Controller
         return redirect()->route('admin.tags.edit', $tag)->with('info', 'La etiqueta se actualizó con éxito');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+   
     public function destroy(Tags $tag)
     {
         $tag->delete();

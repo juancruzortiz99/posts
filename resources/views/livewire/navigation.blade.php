@@ -52,15 +52,14 @@
                   <div class="hidden sm:ml-6 sm:block">
                       <div class="flex space-x-4">
                           <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                         {{--  <a href="#" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
+                          {{--  <a href="#" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
                               aria-current="page">Dashboard</a> --}}
 
                           @foreach ($categories as $category)
-                          <a href="{{route('posts.category', $category)}}"
-                          class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">{{$category->name}}</a>
-
+                              <a href="{{ route('posts.category', $category) }}"
+                                  class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">{{ $category->name }}</a>
                           @endforeach
-                     
+
                       </div>
                   </div>
 
@@ -92,30 +91,34 @@
                                   class="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                                   id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                                   <span class="sr-only">Open user menu</span>
-                                  <img class="h-8 w-8 rounded-full"
-                                      src="{{auth()->user()->profile_photo_url}}"
+                                  <img class="h-8 w-8 rounded-full" src="{{ auth()->user()->profile_photo_url }}"
                                       alt="">
                               </button>
                           </div>
 
                           <!--
-                        Dropdown menu, show/hide based on menu state.
-            
-                        Entering: "transition ease-out duration-100"
-                          From: "transform opacity-0 scale-95"
-                          To: "transform opacity-100 scale-100"
-                        Leaving: "transition ease-in duration-75"
-                          From: "transform opacity-100 scale-100"
-                          To: "transform opacity-0 scale-95"
-                      -->
+                                Dropdown menu, show/hide based on menu state.
+                    
+                                Entering: "transition ease-out duration-100"
+                                  From: "transform opacity-0 scale-95"
+                                  To: "transform opacity-100 scale-100"
+                                Leaving: "transition ease-in duration-75"
+                                  From: "transform opacity-100 scale-100"
+                                  To: "transform opacity-0 scale-95"
+                              -->
                           <div x-show="open" x-on:click.away="open = false"
                               class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                               role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
                               <!-- Active: "bg-gray-100", Not Active: "" -->
-                              <a href="{{route('profile.show')}}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1"
-                                  id="user-menu-item-0">Tu perfil</a>
-                                  <a href="{{route('admin.home')}}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1"
-                                  id="user-menu-item-0">Dashboard</a>
+                              <a href="{{ route('profile.show') }}" class="block px-4 py-2 text-sm text-gray-700"
+                                  role="menuitem" tabindex="-1" id="user-menu-item-0">Tu perfil</a>
+
+                              @can('admin.home')
+                                  <a href="{{ route('admin.home') }}" class="block px-4 py-2 text-sm text-gray-700"
+                                      role="menuitem" tabindex="-1" id="user-menu-item-0">Dashboard</a>
+                              @endcan
+
+
                               <form method="POST" action="{{ route('logout') }}">
                                   @csrf
 
@@ -131,10 +134,10 @@
                   </div>
               @else
                   <div>
-                      <a href="{{route('login')}}"
+                      <a href="{{ route('login') }}"
                           class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Login</a>
 
-                      <a href="{{route('register')}}"
+                      <a href="{{ route('register') }}"
                           class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Register</a>
 
 
@@ -152,13 +155,11 @@
                   aria-current="page">Dashboard</a> --}}
 
 
-                  @foreach ($categories as $category)
-
-                  <a href="{{route('posts.category', $category)}}"
-                  class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">{{$category->name}}</a>
-                      
-                  @endforeach
-               </div>
+              @foreach ($categories as $category)
+                  <a href="{{ route('posts.category', $category) }}"
+                      class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">{{ $category->name }}</a>
+              @endforeach
+          </div>
       </div>
 
 
