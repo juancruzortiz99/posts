@@ -13,14 +13,16 @@
 
 @section('content')
     @if (session('info'))
-        <div class="alert alert-danger">
+        <div class="alert alert-success">
             {{ session('info') }}
         </div>
     @endif
+
+
     <div class="card">
         <div class="card-body">
 
-            {!! Form::model($role, [['route' => 'admin.roles.update', $role], 'method' => 'put']) !!}
+            {!! Form::model($role, ['route' => ['admin.roles.update', $role], 'method' => 'put']) !!}
             @include('admin.roles.partials.form')
 
             {!! Form::submit('Actualizar rol', ['class' => 'btn btn-primary']) !!}
